@@ -1,7 +1,7 @@
 import "./style.css";
 
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
 
 const sizes = {
@@ -28,12 +28,9 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.z = 20;
+camera.rotateY(Math.PI / 2);
+camera.position.z = 17.5;
 scene.add(camera);
-
-// Controls
-const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true;
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -59,15 +56,29 @@ window.addEventListener("resize", () => {
 
 // Particles
 const particlesGeometry = new THREE.BufferGeometry(); // Custom geometry
-const count = 20_000;
+const count = 300_000;
 const arrayLength = count * 3;
 const positionsArray = new Float32Array(arrayLength);
 const colorsArray = new Float32Array(arrayLength);
 
 // Fill the geometry and color arrays with random values
-for (let i = 0; i < arrayLength; i++) {
-  positionsArray[i] = (Math.random() - 0.5) * 10;
+for (let i = 0; i < arrayLength; i += 3) {
+  // Define random positions in a circle
+  const theta = Math.random() * 2 * Math.PI; // Random angle between 0 and 2π
+  const r = Math.random() * 5 + 15; // Random radius between 15 and 20
+
+  // Define random positions
+  // x
+  positionsArray[i] = r * Math.cos(theta);
+  // y
+  positionsArray[i + 1] = (Math.random() - 0.5) * 10;
+  // z
+  positionsArray[i + 2] = r * Math.sin(theta);
+
+  // Define random colors
   colorsArray[i] = Math.random();
+  colorsArray[i + 1] = Math.random();
+  colorsArray[i + 2] = Math.random();
 }
 
 particlesGeometry.setAttribute(
@@ -93,9 +104,6 @@ const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
-
-  // Update controls
-  controls.update();
 
   // Render
   renderer.render(scene, camera);
