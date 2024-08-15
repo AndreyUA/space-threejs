@@ -1,7 +1,6 @@
 import "./style.css";
 
 import * as THREE from "three";
-// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
 
 const sizes = {
@@ -10,7 +9,11 @@ const sizes = {
 };
 
 // Debug
-const gui = new GUI();
+let gui: GUI | null = null;
+const currentUrl = window.location.href;
+if (currentUrl.includes("debug")) {
+  gui = new GUI();
+}
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl") as HTMLCanvasElement;
@@ -20,7 +23,6 @@ const scene = new THREE.Scene();
 
 // Textures
 const textureLoader = new THREE.TextureLoader();
-// TODO: remove unnecessary textures later
 const particleTexture = textureLoader.load("/4.png");
 
 // Base camera
@@ -28,8 +30,9 @@ const camera = new THREE.PerspectiveCamera(
   75,
   sizes.width / sizes.height,
   0.1,
-  100
+  10
 );
+camera.rotateX(Math.PI / 2);
 camera.rotateY(Math.PI / 2);
 camera.position.z = 17.5;
 scene.add(camera);
@@ -58,7 +61,7 @@ window.addEventListener("resize", () => {
 
 // Particles
 const particlesGeometry = new THREE.BufferGeometry(); // Custom geometry
-const count = 300_000;
+const count = 600_000;
 const arrayLength = count * 3;
 const positionsArray = new Float32Array(arrayLength);
 const colorsArray = new Float32Array(arrayLength);
@@ -67,7 +70,8 @@ const colorsArray = new Float32Array(arrayLength);
 for (let i = 0; i < arrayLength; i += 3) {
   // Define random positions in a circle
   const theta = Math.random() * 2 * Math.PI; // Random angle between 0 and 2π
-  const r = Math.random() * 5 + 15; // Random radius between 15 and 20
+  // ! random value formula: Math.random() * (max - min) + min
+  const r = Math.random() * 25 + 5; // Random radius between 30 and 5
 
   // Define random positions
   // x
