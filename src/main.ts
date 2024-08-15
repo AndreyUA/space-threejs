@@ -108,6 +108,9 @@ const tick = () => {
   // Render
   renderer.render(scene, camera);
 
+  // Particles rotation
+  particles.rotation.y = elapsedTime * 0.1;
+
   // Call tick again on the next frame
   window.requestAnimationFrame(tick);
 };
