@@ -20,6 +20,8 @@ const scene = new THREE.Scene();
 
 // Textures
 const textureLoader = new THREE.TextureLoader();
+// TODO: remove unnecessary textures later
+const particleTexture = textureLoader.load("/4.png");
 
 // Base camera
 const camera = new THREE.PerspectiveCamera(
@@ -94,6 +96,9 @@ const particlesMaterial = new THREE.PointsMaterial({
   size: 0.1,
   sizeAttenuation: true,
   vertexColors: true,
+  transparent: true,
+  alphaMap: particleTexture,
+  depthTest: false,
 });
 
 const particles = new THREE.Points(particlesGeometry, particlesMaterial);
