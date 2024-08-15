@@ -111,6 +111,14 @@ scene.add(particles);
 // ! Animation
 const clock = new THREE.Clock();
 
+const config: Record<string, number> = {
+  speed: 0.1,
+};
+
+if (gui) {
+  gui.add(config, "speed").min(0).max(1).step(0.001).name("Move speed");
+}
+
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
 
@@ -118,7 +126,7 @@ const tick = () => {
   renderer.render(scene, camera);
 
   // Particles rotation
-  particles.rotation.y = elapsedTime * 0.1;
+  particles.rotation.y = elapsedTime * config.speed;
 
   // Call tick again on the next frame
   window.requestAnimationFrame(tick);
